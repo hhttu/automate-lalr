@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-enum Non_terminal { E };
+enum NonTerminal { E = 'E', E_prime = '_' };
 
 enum Identificateurs { OPENPAR, CLOSEPAR, PLUS, MULT, INT, FIN, ERREUR, EXPRESSION };
 
@@ -25,12 +25,20 @@ class Entier : public Symbole {
       Entier(int v) : Symbole(INT), valeur(v) { }
       ~Entier() { }
       virtual void Affiche();
+      int getValue() const { return valeur; }
+      
    protected:
       int valeur;
 };
 
 class Expression : public Symbole {
+   public:
+      Expression(NonTerminal NT, int v) : Symbole(EXPRESSION), NT(NT), valeur(v) { }
+      ~Expression() { }
+      virtual void Affiche();
+      int getValue() const { return valeur; }
+
    protected:
-      Non_terminal NT;
+      NonTerminal NT;
       int valeur;
 };
