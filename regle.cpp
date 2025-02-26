@@ -15,12 +15,12 @@ void Regle::Affiche() {
     cout << endl;
 }
 
-bool Regle::verifyParams(vector<Symbole&> params) {
+bool Regle::verifyParams(vector<Symbole>& params) {
     if (droite.size() != params.size()) {
         return false;
     }
 
-    for (int i = 0; i < droite.size(); i++) {
+    for (size_t i = 0; i < droite.size(); i++) {
         if ( !Symbole::isSameIndent(params[i], droite[i]) ) {
             return false;
         }
@@ -28,6 +28,14 @@ bool Regle::verifyParams(vector<Symbole&> params) {
     return true;
 }
 
-Symbole* Regle::evaluate(vector<Symbole&> v) {
+Symbole* Regle::evaluate(vector<Symbole>& v) {
     return evaluateFunction(v);
+}
+
+Regle::~Regle() {
+    // cout << "Destructeur Regle" << endl;
+}
+
+Regle::Regle() {
+    // cout << "Constructeur Regle" << endl;
 }

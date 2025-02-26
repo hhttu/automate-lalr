@@ -3,28 +3,28 @@
 #include "symbole.h"
 
 
-Symbole* evaluateRegle1(vector<Symbole&> v) {
+Symbole* evaluateRegle1(vector<Symbole>& v) {
     Expression& e = dynamic_cast<Expression&>(v[0]);
     return new Expression( NonTerminal::E_prime, e.getValue() );
 }
 
-Symbole* evaluateRegle2(vector<Symbole&> v) {
+Symbole* evaluateRegle2(vector<Symbole>& v) {
     Expression& e1 = dynamic_cast<Expression&>(v[0]);
     Expression& e2 = dynamic_cast<Expression&>(v[2]);
     return new Expression( NonTerminal::E, e1.getValue() + e2.getValue() );
 }
 
-Symbole* evaluateRegle3(vector<Symbole&> v) {
+Symbole* evaluateRegle3(vector<Symbole>& v) {
     Expression& e1 = dynamic_cast<Expression&>(v[0]);
     Expression& e2 = dynamic_cast<Expression&>(v[2]);
     return new Expression( NonTerminal::E, e1.getValue() * e2.getValue() );
 }
 
-Symbole* evaluateRegle4(vector<Symbole&> v) {
+Symbole* evaluateRegle4(vector<Symbole>& v) {
     return new Expression( NonTerminal::E, dynamic_cast<Expression&>(v[1]).getValue() );
 }
 
-Symbole* evaluateRegle5(vector<Symbole&> v) {
+Symbole* evaluateRegle5(vector<Symbole>& v) {
     return new Expression( NonTerminal::E, dynamic_cast<Entier&>(v[0]).getValue() );
 }
 
@@ -33,10 +33,11 @@ void Automate::init() {
     // TableauAnalyse TA = NULL; 
 
     // TODO: add regles
+
     Regle r1 = Regle(
         NonTerminal::E_prime, 
         vector<Symbole>{ Expression(NonTerminal::E, 0) },
-        evaluateRegle1
+        evaluateRegle1 
     );
 
     Regle r2 = Regle(
@@ -52,7 +53,7 @@ void Automate::init() {
     );
 
     Regle r4 = Regle(
-        NonTerminal::E_prime, 
+        NonTerminal::E, 
         vector<Symbole>{ Symbole(OPENPAR), Expression(NonTerminal::E, 0), Symbole(CLOSEPAR) },
         evaluateRegle4
     );
@@ -63,6 +64,7 @@ void Automate::init() {
         evaluateRegle5
     );
 
+    regles = vector<Regle>();
     regles.push_back(r1);
     regles.push_back(r2);
     regles.push_back(r3);
@@ -90,8 +92,14 @@ void Automate::empiler(int n, Symbole& s, int e) {
     // TODO: implement (Son)
 }
 
+Automate::Automate() {
+    //TODO
+    // cout << "Constructeur Automate" << endl;
+}
 
-
-
+Automate::~Automate() {
+    // TODO
+    // cout << "Destructeur Automate" << endl;
+}
 
 

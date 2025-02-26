@@ -8,9 +8,12 @@ int main(void) {
 
    Lexer l(chaine);
 
-   Automate& automate = Automate::getInstance();
+   // Automate& automate = Automate::getInstance();
+   // automate.init();
+   Automate automate = Automate();
    automate.init();
-   
+   automate.afficherRegles();
+
 
    // Symbole * s;
    // while(*(s=l.Consulter())!=FIN) {

@@ -9,6 +9,6 @@ class TAE {
     // TODO: Thi Tho
 };
 
-typedef map<int, map<Symbole, TAE>> TableauAnalyse;
+// typedef map<int, map<Symbole, TAE>> TableauAnalyse;
 
 #endif // TAE_H

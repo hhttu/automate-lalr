@@ -10,3 +10,8 @@ void Entier::Affiche() {
    cout<<"("<<valeur<<")";
 }
 
+void Expression::Affiche() {
+   cout<<NonTerminalEtiquettes[NT];
+   cout<<"("<<valeur<<")";
+}
+

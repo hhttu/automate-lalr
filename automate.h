@@ -11,10 +11,9 @@ using namespace std;
 
 class Automate {
     public:
-        static Automate& getInstance() {
-            static Automate instance;
-            return instance;
-        };
+        Automate();
+        ~Automate();
+        
         void executer(Lexer lexer);
 
         void init();
@@ -23,15 +22,12 @@ class Automate {
 
     protected:
         stack<int> pileEtat;
-        stack<Symbole*> pileSymbole;
-        TableauAnalyse TA;
+        stack<Symbole> pileSymbole;
+        // TableauAnalyse TA;
         vector<Regle> regles;
 
         void depiler(Symbole& s, int e);
         void empiler(int n, Symbole& s, int e);
-
-    private:
-        Automate() {};
 };
 
 #endif // AUTOMATE_H
