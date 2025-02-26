@@ -22,12 +22,13 @@ class Automate {
 
     protected:
         stack<int> pileEtat;
-        stack<Symbole> pileSymbole;
+        stack<Symbole*> pileSymbole;
         // TableauAnalyse TA;
-        vector<Regle> regles;
+        vector<Regle*> regles;
 
-        void depiler(Symbole& s, int e);
-        void empiler(int n, Symbole& s, int e);
+        void depiler(Symbole* s, int e);
+        void empiler(int n, Symbole* s, int e);
+        void emptyPiles();
 };
 
 #endif // AUTOMATE_H

@@ -11,18 +11,19 @@ using namespace std;
 class Regle {
     public:
         Regle();
-        Regle(NonTerminal g, vector<Symbole> d, function<Symbole*(vector<Symbole>&)>f) : gauche(g), droite(d), evaluateFunction(f) { }
+        Regle(NonTerminal g, vector<Symbole*> d, function<Symbole*(vector<Symbole*>)>f) : gauche(g), droite(d), evaluateFunction(f) { }
         ~Regle();
+
         void Affiche();
         int getNbSymboleDroite();
 
-        bool verifyParams(vector<Symbole>& params);
-        Symbole* evaluate(vector<Symbole>& v);
+        bool verifyParams(vector<Symbole*> params);
+        Symbole* evaluate(vector<Symbole*> v);
 
     protected:
         NonTerminal gauche;
-        vector<Symbole> droite;
-        function<Symbole*(vector<Symbole>&)> evaluateFunction;
+        vector<Symbole*> droite;
+        function<Symbole*(vector<Symbole*>)> evaluateFunction;
 };
 
 

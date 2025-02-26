@@ -2,79 +2,53 @@
 #include "regle.h"
 #include "symbole.h"
 
-
-Symbole* evaluateRegle1(vector<Symbole>& v) {
-    Expression& e = dynamic_cast<Expression&>(v[0]);
-    return new Expression( NonTerminal::E_prime, e.getValue() );
-}
-
-Symbole* evaluateRegle2(vector<Symbole>& v) {
-    Expression& e1 = dynamic_cast<Expression&>(v[0]);
-    Expression& e2 = dynamic_cast<Expression&>(v[2]);
-    return new Expression( NonTerminal::E, e1.getValue() + e2.getValue() );
-}
-
-Symbole* evaluateRegle3(vector<Symbole>& v) {
-    Expression& e1 = dynamic_cast<Expression&>(v[0]);
-    Expression& e2 = dynamic_cast<Expression&>(v[2]);
-    return new Expression( NonTerminal::E, e1.getValue() * e2.getValue() );
-}
-
-Symbole* evaluateRegle4(vector<Symbole>& v) {
-    return new Expression( NonTerminal::E, dynamic_cast<Expression&>(v[1]).getValue() );
-}
-
-Symbole* evaluateRegle5(vector<Symbole>& v) {
-    return new Expression( NonTerminal::E, dynamic_cast<Entier&>(v[0]).getValue() );
-}
+Symbole* evaluateRegle1(vector<Symbole*> v);
+Symbole* evaluateRegle2(vector<Symbole*> v);
+Symbole* evaluateRegle3(vector<Symbole*> v);
+Symbole* evaluateRegle4(vector<Symbole*> v);
+Symbole* evaluateRegle5(vector<Symbole*> v);
 
 void Automate::init() {
     // TODO: init tableau d'analyse (Thi Tho)
     // TableauAnalyse TA = NULL; 
 
-    // TODO: add regles
-
-    Regle r1 = Regle(
+    Regle* r1 = new Regle(
         NonTerminal::E_prime, 
-        vector<Symbole>{ Expression(NonTerminal::E, 0) },
+        vector<Symbole*>{ new Expression(NonTerminal::E, NULL) },
         evaluateRegle1 
     );
 
-    Regle r2 = Regle(
+    Regle* r2 = new Regle(
         NonTerminal::E, 
-        vector<Symbole>{ Expression(NonTerminal::E, 0), Symbole(PLUS), Expression(NonTerminal::E, 0) },
+        vector<Symbole*>{ new Expression(NonTerminal::E, NULL), new Symbole(PLUS), new Expression(NonTerminal::E, NULL) },
         evaluateRegle2
     );
 
-    Regle r3 = Regle(
+    Regle* r3 = new Regle(
         NonTerminal::E, 
-        vector<Symbole>{ Expression(NonTerminal::E, 0), Symbole(MULT), Expression(NonTerminal::E, 0) },
+        vector<Symbole*>{ new Expression(NonTerminal::E, NULL), new Symbole(MULT), new Expression(NonTerminal::E, NULL) },
         evaluateRegle3
     );
 
-    Regle r4 = Regle(
+    Regle* r4 = new Regle(
         NonTerminal::E, 
-        vector<Symbole>{ Symbole(OPENPAR), Expression(NonTerminal::E, 0), Symbole(CLOSEPAR) },
+        vector<Symbole*>{ new Symbole(OPENPAR), new Expression(NonTerminal::E, NULL), new Symbole(CLOSEPAR) },
         evaluateRegle4
     );
 
-    Regle r5 = Regle(
+    Regle* r5 = new Regle(
         NonTerminal::E, 
-        vector<Symbole>{ Entier(0) },
+        vector<Symbole*>{ new Entier(NULL) },
         evaluateRegle5
     );
 
-    regles = vector<Regle>();
-    regles.push_back(r1);
-    regles.push_back(r2);
-    regles.push_back(r3);
-    regles.push_back(r4);
-    regles.push_back(r5);
+    regles = vector<Regle*>{r1, r2, r3, r4, r5};
+    emptyPiles();
 }
 
 void Automate::afficherRegles() {
     for (auto &r : regles) {
-        r.Affiche();
+        r->Affiche();
     }
 }
 
@@ -84,22 +58,62 @@ void Automate::executer(Lexer lexer) {
     // algorithme
 }
 
-void Automate::depiler(Symbole& s, int e) {
+void Automate::depiler(Symbole* s, int e) {
     // TODO: implement (Thanh Tu)
 }
 
-void Automate::empiler(int n, Symbole& s, int e) {
-    // TODO: implement (Son)
+void Automate::empiler(int n, Symbole* s, int e) {
+    // TODO: implement (Son), when empiler, remember to delete symbols -> not memory leak
+}
+
+void Automate::emptyPiles() {
+    // Empty Pile etats
+    pileEtat = stack<int>();
+
+    // Empty Pile symboles
+    while(!pileSymbole.empty()) {
+        delete pileSymbole.top();
+        pileSymbole.pop();
+    }
+    pileSymbole = stack<Symbole*>();
 }
 
 Automate::Automate() {
-    //TODO
     // cout << "Constructeur Automate" << endl;
 }
 
 Automate::~Automate() {
-    // TODO
     // cout << "Destructeur Automate" << endl;
+    for (auto &r : regles) {
+        delete r;
+    }
+    regles.clear();
+    emptyPiles();
 }
 
 
+
+Symbole* evaluateRegle1(vector<Symbole*> v) {
+    Expression* e = dynamic_cast<Expression*>(v[0]);
+    return new Expression( NonTerminal::E_prime, e->getValue() );
+}
+
+Symbole* evaluateRegle2(vector<Symbole*> v) {
+    Expression* e1 = dynamic_cast<Expression*>(v[0]);
+    Expression* e2 = dynamic_cast<Expression*>(v[2]);
+    return new Expression( NonTerminal::E, e1->getValue() + e2->getValue() );
+}
+
+Symbole* evaluateRegle3(vector<Symbole*> v) {
+    Expression* e1 = dynamic_cast<Expression*>(v[0]);
+    Expression* e2 = dynamic_cast<Expression*>(v[2]);
+    return new Expression( NonTerminal::E, e1->getValue() * e2->getValue() );
+}
+
+Symbole* evaluateRegle4(vector<Symbole*> v) {
+    return new Expression( NonTerminal::E, dynamic_cast<Expression*>(v[1])->getValue() );
+}
+
+Symbole* evaluateRegle5(vector<Symbole*> v) {
+    return new Expression( NonTerminal::E, dynamic_cast<Entier*>(v[0])->getValue() );
+}
