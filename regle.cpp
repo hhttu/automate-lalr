@@ -6,12 +6,28 @@ int Regle::getNbSymboleDroite() {
 }
 
 void Regle::Affiche() {
-    cout << "Régle " << id << ": ";
-    cout << (char) gauche;
-    cout << " -> ";
+    cout << "Régle " << ": ";
+    cout << NonTerminalEtiquettes[gauche] << " -> ";
     for (auto &s : droite) {
         s.Affiche();
         cout << " ";
     }
     cout << endl;
+}
+
+bool Regle::verifyParams(vector<Symbole&> params) {
+    if (droite.size() != params.size()) {
+        return false;
+    }
+
+    for (int i = 0; i < droite.size(); i++) {
+        if ( !Symbole::isSameIndent(params[i], droite[i]) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+Symbole* Regle::evaluate(vector<Symbole&> v) {
+    return evaluateFunction(v);
 }

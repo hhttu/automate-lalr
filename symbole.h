@@ -3,7 +3,9 @@
 #include <string>
 using namespace std;
 
-enum NonTerminal { E = 'E', E_prime = '_' };
+enum NonTerminal { E, E_prime };
+
+const string NonTerminalEtiquettes[] = { "E", "E'" };
 
 enum Identificateurs { OPENPAR, CLOSEPAR, PLUS, MULT, INT, FIN, ERREUR, EXPRESSION };
 
@@ -11,13 +13,25 @@ const string Etiquettes[] = { "OPENPAR", "CLOSEPAR", "PLUS", "MULT", "INT", "FIN
 
 class Symbole {
    public:
-      Symbole(int i) : ident(i) {  }
+      Symbole(Identificateurs i) : ident(i) {  }
       virtual ~Symbole() { }
       operator int() const { return ident; }
       virtual void Affiche();
 
+      static bool isSameIndent(Symbole& s1, Symbole& s2) {
+         if (s1.ident == ERREUR || s2.ident == ERREUR) {
+            return false;
+         }
+
+         if (s1.ident != EXPRESSION && s2.ident != EXPRESSION) {
+            return s1.ident == s2.ident;
+         }
+         
+         return s1.ident == s2.ident; //&& dynamic_cast<Expression&>(s1).getNT() == dynamic_cast<Expression&>(s2).getNT();
+      }
+
    protected:
-      int ident;
+      Identificateurs ident;
 };
 
 class Entier : public Symbole {
@@ -26,7 +40,7 @@ class Entier : public Symbole {
       ~Entier() { }
       virtual void Affiche();
       int getValue() const { return valeur; }
-      
+
    protected:
       int valeur;
 };
@@ -37,6 +51,7 @@ class Expression : public Symbole {
       ~Expression() { }
       virtual void Affiche();
       int getValue() const { return valeur; }
+      NonTerminal getNT() const { return NT; }
 
    protected:
       NonTerminal NT;

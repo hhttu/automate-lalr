@@ -1,5 +1,6 @@
 #include <iostream>
 #include "lexer.h"
+#include "automate.h"
 
 
 int main(void) {
@@ -7,12 +8,16 @@ int main(void) {
 
    Lexer l(chaine);
 
-   Symbole * s;
-   while(*(s=l.Consulter())!=FIN) {
-      s->Affiche();
-      cout<<endl;
-      l.Avancer();
-   }
+   Automate& automate = Automate::getInstance();
+   automate.init();
+   
+
+   // Symbole * s;
+   // while(*(s=l.Consulter())!=FIN) {
+   //    s->Affiche();
+   //    cout<<endl;
+   //    l.Avancer();
+   // }
    return 0;
 }
 
