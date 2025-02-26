@@ -62,9 +62,31 @@ void Automate::depiler(Symbole* s, int e) {
     // TODO: implement (Thanh Tu)
 }
 
-void Automate::empiler(int n, Symbole* s, int e) {
+void Automate::empiler(Regle* regleReduction) {
     // TODO: implement (Son), when empiler, remember to delete symbols -> not memory leak
+    int n = regleReduction->getNbSymboleDroite();
+
+    vector<Symbole*> empilePiles = vector<Symbole*>();
+    for (int i = 0; i < n; i++) {
+        pileEtat.pop();
+        empilePiles.push_back(pileSymbole.top());
+        pileSymbole.pop();
+    }
+
+    Symbole* s = regleReduction->evaluate(empilePiles);
+    pileSymbole.push(s);
+
+    int topEtat = pileEtat.top();
+    int newEtat = TA[topEtat][s->getIdent()].getValue();
+    pileEtat.push(newEtat);
+
+    // delete symbols
+    for (auto &s : empilePiles) {
+        delete s;
+    }
+    empilePiles.clear();
 }
+
 
 void Automate::emptyPiles() {
     // Empty Pile etats

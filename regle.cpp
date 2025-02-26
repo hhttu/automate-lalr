@@ -29,6 +29,10 @@ bool Regle::verifyParams(vector<Symbole*> params) {
 }
 
 Symbole* Regle::evaluate(vector<Symbole*> v) {
+    if (!verifyParams(v)) {
+        return new Symbole(ERREUR);
+        throw "Erreur de paramètres"; // TODO: check if this erreur is thrown or not
+    }
     return evaluateFunction(v);
 }
 
