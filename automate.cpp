@@ -1,12 +1,21 @@
 #include "automate.h"
 #include "regle.h"
 #include "symbole.h"
+#include "TAE.h"
+#include <iostream>
+
+using namespace std;
 
 Symbole* evaluateRegle1(vector<Symbole*> v);
 Symbole* evaluateRegle2(vector<Symbole*> v);
 Symbole* evaluateRegle3(vector<Symbole*> v);
 Symbole* evaluateRegle4(vector<Symbole*> v);
 Symbole* evaluateRegle5(vector<Symbole*> v);
+
+bool isContainIdentificateurKey(TableauAnalyse& TA, int etat, Identificateurs identificateurs) {
+    const auto& rowMap = TA[etat];
+    return rowMap.find(identificateurs) != rowMap.end();
+}
 
 void Automate::init() {
     // TODO: init tableau d'analyse (Thi Tho)
@@ -54,12 +63,66 @@ void Automate::afficherRegles() {
 
 void Automate::executer(Lexer lexer) {
     // TODO: empty 2 stacks (Thanh Tu)
+    Symbole * s = lexer.Consulter();
+    bool endExecution = false, isValid = true;
+    int topEtat, finalValue = NULL;
+    Identificateurs identificateurs;
 
-    // algorithme
+    while (!endExecution && isValid && *s != FIN) {
+        identificateurs = s->getIdent();
+        topEtat = pileEtat.top();
+
+        if (isContainIdentificateurKey(TA, topEtat, identificateurs)) {
+            TAE element = TA[topEtat][identificateurs];
+
+            // TAEType type = element.getType();
+            // int valeur = element.getValue();
+
+            // switch (TAEType)
+            // {
+            // case TAEType::DECALAGE:
+            //     depiler(s, topEtat);
+            //     s = lexer.Consulter();
+            //     break;
+            // case TAEType::REDUCTION:
+            //     empiler(regles[valeur-1]);
+            //     break;
+            // case TAEType::ACCEPT:
+            //     endExecution = true;
+            //     finalValue = dynamic_cast<Expression*>(pileSymbole.top())->getValue();
+            //     break;
+            // case TAEType::ERREUR:
+            //     endExecution = false;
+            //     isValid = false;
+            //     break;
+            // default:
+            //     break;
+            // }
+        } else {
+            endExecution = false;
+            isValid = false;
+        }
+
+    }
+
+    if (isValid) {
+        cout << "Chaine validée" << endl;
+        if (finalValue) {
+            cout << "Value = " << finalValue;
+        }
+    } else {
+        cout << "Chaine invalidée";
+    }
+
+    emptyPiles();
 }
 
 void Automate::depiler(Symbole* s, int e) {
     // TODO: implement (Thanh Tu)
+    pileEtat.push(e);
+    pileSymbole.push(s);
+
+    
 }
 
 void Automate::empiler(Regle* regleReduction) {

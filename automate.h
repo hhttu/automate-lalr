@@ -10,14 +10,31 @@
 using namespace std;
 
 class Automate {
+    /// Classe représentant un automate syntaxique
+
     public:
+
+        /** 
+         * Constructeur par défaut et destructeur de la classe Automate
+         */
         Automate();
         ~Automate();
         
+        /** 
+         * Exécute l'automate en analysant la chaîne donnés par le lexer
+         * 
+         * @param[in] lexer {Lexer} Analyseur lexical fournissant la chaîne
+         */
         void executer(Lexer lexer);
 
+        /** 
+         * Initialise l'automate en réinitialisant les piles et les règles.
+         */
         void init();
 
+        /** 
+         * Affiche les règles utilisées par l'automate.
+         */
         void afficherRegles();
 
     protected:
@@ -26,8 +43,24 @@ class Automate {
         TableauAnalyse TA;
         vector<Regle*> regles;
 
+        /** 
+         * Dépile un symbole et un état.
+         * 
+         * @param[in] s {Symbole*} Symbole à dépiler.
+         * @param[in] e {int} État correspondant.
+         */
         void depiler(Symbole* s, int e);
+
+        /** 
+         * Empile les piles en fonction de la règle de réduction
+         * 
+         * @param[in] regleReduction {Regle*} Règle de réduction à utiliser
+         */
         void empiler(Regle* regleReduction);
+
+        /** 
+         * Vide les piles de l'automate.
+         */
         void emptyPiles();
 };
 
