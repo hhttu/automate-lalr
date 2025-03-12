@@ -1,8 +1,8 @@
+#include <iostream>
 #include "automate.h"
 #include "regle.h"
 #include "symbole.h"
 #include "TAE.h"
-#include <iostream>
 
 using namespace std;
 
@@ -18,37 +18,36 @@ bool isContainIdentificateurKey(TableauAnalyse& TA, int etat, Identificateurs id
 }
 
 void Automate::init() {
-    // TODO: init tableau d'analyse (Thi Tho)
     remplirTable(TA);
-    afficherTable(TA); 
+    // afficherTable(TA); 
 
     Regle* r1 = new Regle(
         NonTerminal::E_prime, 
-        vector<Symbole*>{ new Expression(NonTerminal::E, NULL) },
+        vector<Symbole*>{ new Expression(NonTerminal::E, 0) },
         evaluateRegle1 
     );
 
     Regle* r2 = new Regle(
         NonTerminal::E, 
-        vector<Symbole*>{ new Expression(NonTerminal::E, NULL), new Symbole(PLUS), new Expression(NonTerminal::E, NULL) },
+        vector<Symbole*>{ new Expression(NonTerminal::E, 0), new Symbole(PLUS), new Expression(NonTerminal::E, 0) },
         evaluateRegle2
     );
 
     Regle* r3 = new Regle(
         NonTerminal::E, 
-        vector<Symbole*>{ new Expression(NonTerminal::E, NULL), new Symbole(MULT), new Expression(NonTerminal::E, NULL) },
+        vector<Symbole*>{ new Expression(NonTerminal::E, 0), new Symbole(MULT), new Expression(NonTerminal::E, 0) },
         evaluateRegle3
     );
 
     Regle* r4 = new Regle(
         NonTerminal::E, 
-        vector<Symbole*>{ new Symbole(OPENPAR), new Expression(NonTerminal::E, NULL), new Symbole(CLOSEPAR) },
+        vector<Symbole*>{ new Symbole(OPENPAR), new Expression(NonTerminal::E, 0), new Symbole(CLOSEPAR) },
         evaluateRegle4
     );
 
     Regle* r5 = new Regle(
         NonTerminal::E, 
-        vector<Symbole*>{ new Entier(NULL) },
+        vector<Symbole*>{ new Entier(0) },
         evaluateRegle5
     );
 
@@ -63,12 +62,11 @@ void Automate::afficherRegles() {
 }
 
 void Automate::executer(Lexer lexer) {
-    // TODO: empty 2 stacks (Thanh Tu)
     pileEtat.push(0);
     
     Symbole * s = lexer.Consulter();
     bool endExecution = false, isValid = true;
-    int topEtat, finalValue = NULL;
+    int topEtat, finalValue;
     Identificateurs identificateur;
 
     int cnt = 0;
@@ -123,13 +121,11 @@ void Automate::executer(Lexer lexer) {
 }
 
 void Automate::depiler(Symbole* s, int e) {
-    // TODO: implement (Thanh Tu)
     pileEtat.push(e);
     pileSymbole.push(s);
 }
 
 void Automate::empiler(Regle* regleReduction) {
-    // TODO: implement (Son), when empiler, remember to delete symbols -> not memory leak
     int n = regleReduction->getNbSymboleDroite();
     vector<Symbole*> empilePiles = vector<Symbole*>();
     for (int i = 0; i < n; i++) {
