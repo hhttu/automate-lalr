@@ -122,7 +122,6 @@ void Automate::depiler(Symbole* s, int e) {
     pileEtat.push(e);
     pileSymbole.push(s);
 
-    
 }
 
 void Automate::empiler(Regle* regleReduction) {

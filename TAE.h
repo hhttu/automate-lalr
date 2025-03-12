@@ -46,4 +46,7 @@ public:
 // Définition de la table d’analyse (État → (Identificateur → Action TAE))
 typedef map<int, map<Identificateurs, TAE>> TableauAnalyse;
 
+void remplirTable(TableauAnalyse &table);
+void afficherTable(const TableauAnalyse & table);
+
 #endif // TAE_H
