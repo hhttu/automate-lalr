@@ -70,9 +70,9 @@ class Regle {
         Symbole* evaluate(vector<Symbole*> v);
 
     protected:
-        NonTerminal gauche;
-        vector<Symbole*> droite;
-        function<Symbole*(vector<Symbole*>)> evaluateFunction;
+        NonTerminal gauche; // Non terminal du côté gauche de la règle
+        vector<Symbole*> droite; // Liste de symboles du côté droit de la règle
+        function<Symbole*(vector<Symbole*>)> evaluateFunction; // Fonction d'évaluation de la règle
 };
 
 

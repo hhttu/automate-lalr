@@ -16,6 +16,8 @@ void Regle::Affiche() {
 }
 
 bool Regle::verifyParams(vector<Symbole*> params) {
+    // on vérifie si le nombre de paramètres est le même et si les paramètres sont du même type (meme identificateur)
+
     if (droite.size() != params.size()) {
         return false;
     }
@@ -32,19 +34,15 @@ bool Regle::verifyParams(vector<Symbole*> params) {
 Symbole* Regle::evaluate(vector<Symbole*> v) {
     if (!verifyParams(v)) {
         return new Symbole(ERREUR);
-        throw "Erreur de paramètres"; // TODO: check if this erreur is thrown or not
     }
     return evaluateFunction(v);
 }
 
 Regle::~Regle() {
-    // cout << "Destructeur Regle" << endl;
     for (auto &s : droite) {
         delete s;
     }
     droite.clear();
 }
 
-Regle::Regle() {
-    // cout << "Constructeur Regle" << endl;
-}
+Regle::Regle() {}

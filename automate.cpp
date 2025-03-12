@@ -18,9 +18,10 @@ bool isContainIdentificateurKey(TableauAnalyse& TA, int etat, Identificateurs id
 }
 
 void Automate::init() {
+    // Initialiser la table d'analyse
     remplirTable(TA);
-    // afficherTable(TA); 
 
+    // Initialiser les règles
     Regle* r1 = new Regle(
         NonTerminal::E_prime, 
         vector<Symbole*>{ new Expression(NonTerminal::E, 0) },
@@ -118,7 +119,7 @@ void Automate::executer(Lexer lexer) {
     }
 
     emptyPiles();
-    delete s;
+    delete s; // on supprime le dernier symbole
 }
 
 void Automate::depiler(Symbole* s, int e) {
@@ -127,17 +128,22 @@ void Automate::depiler(Symbole* s, int e) {
 }
 
 void Automate::empiler(Regle* regleReduction) {
+    // Empile les piles en fonction de la règle de réduction
+
+    // On dépile n symboles de la pile symbole
     int n = regleReduction->getNbSymboleDroite();
-    vector<Symbole*> empilePiles = vector<Symbole*>();
+    vector<Symbole*> empilePiles = vector<Symbole*>(); // Piles à empiler, pour les supprimer après (delete)
     for (int i = 0; i < n; i++) {
         pileEtat.pop();
         empilePiles.push_back(pileSymbole.top());
         pileSymbole.pop();
     }
 
+    // On empile le symbole de gauche qui est retourné par la fonction d'évaluation de la règle de réduction
     Symbole* s = regleReduction->evaluate(empilePiles);
     pileSymbole.push(s);
 
+    // On détermine le nouvel état et on l'empile
     int topEtat = pileEtat.top();
     int newEtat = TA[topEtat][s->getIdent()].getValue();
     pileEtat.push(newEtat);
@@ -177,28 +183,29 @@ Automate::~Automate() {
 }
 
 
+// Definir les fonctions d'évaluation des règles
 
-Symbole* evaluateRegle1(vector<Symbole*> v) {
+Symbole* evaluateRegle1(vector<Symbole*> v) { // E' -> E
     Expression* e = dynamic_cast<Expression*>(v[0]);
     return new Expression( NonTerminal::E_prime, e->getValue() );
 }
 
-Symbole* evaluateRegle2(vector<Symbole*> v) {
+Symbole* evaluateRegle2(vector<Symbole*> v) { // E -> E + E
     Expression* e1 = dynamic_cast<Expression*>(v[0]);
     Expression* e2 = dynamic_cast<Expression*>(v[2]);
     return new Expression( NonTerminal::E, e1->getValue() + e2->getValue() );
 }
 
-Symbole* evaluateRegle3(vector<Symbole*> v) {
+Symbole* evaluateRegle3(vector<Symbole*> v) { // E -> E * E
     Expression* e1 = dynamic_cast<Expression*>(v[0]);
     Expression* e2 = dynamic_cast<Expression*>(v[2]);
     return new Expression( NonTerminal::E, e1->getValue() * e2->getValue() );
 }
 
-Symbole* evaluateRegle4(vector<Symbole*> v) {
+Symbole* evaluateRegle4(vector<Symbole*> v) { // E -> (E)
     return new Expression( NonTerminal::E, dynamic_cast<Expression*>(v[1])->getValue() );
 }
 
-Symbole* evaluateRegle5(vector<Symbole*> v) {
+Symbole* evaluateRegle5(vector<Symbole*> v) { // E -> entier
     return new Expression( NonTerminal::E, dynamic_cast<Entier*>(v[0])->getValue() );
 }
