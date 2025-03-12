@@ -118,6 +118,7 @@ void Automate::executer(Lexer lexer) {
     }
 
     emptyPiles();
+    delete s;
 }
 
 void Automate::depiler(Symbole* s, int e) {
@@ -158,6 +159,7 @@ void Automate::emptyPiles() {
         delete pileSymbole.top();
         pileSymbole.pop();
     }
+
     pileSymbole = stack<Symbole*>();
 }
 

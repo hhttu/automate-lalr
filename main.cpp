@@ -4,15 +4,13 @@
 #include "TAE.h"
 
 int main(void) {
-   string chaine("1+(34**123)");
-
-   Lexer l(chaine);
-
    Automate automate = Automate();
    automate.init();
-   // automate.afficherRegles();
 
+   string chaine("(112+213)*213+213*12");
+   Lexer l(chaine);
    automate.executer(l);
+
    return 0;
 }
 
