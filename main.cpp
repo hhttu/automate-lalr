@@ -4,16 +4,15 @@
 #include "TAE.h"
 
 int main(void) {
-   string chaine("(1+34)*123");
+   string chaine("1+(34*123)");
 
    Lexer l(chaine);
 
-   // Automate& automate = Automate::getInstance();
-   // automate.init();
    Automate automate = Automate();
    automate.init();
    automate.afficherRegles();
 
+   automate.executer(l);
 
    // Symbole * s;
    // while(*(s=l.Consulter())!=FIN) {

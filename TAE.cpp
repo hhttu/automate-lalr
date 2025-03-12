@@ -2,6 +2,29 @@
 #include <map>
 #include "TAE.h"
 
+void TAE::afficher() const {
+    string typeStr;
+    switch (type) {
+        case TAEType::DECALAGE: typeStr = "DECALAGE"; break;
+        case TAEType::REDUCTION: typeStr = "REDUCTION"; break;
+        case TAEType::ACCEPTER: typeStr = "ACCEPTER"; break;
+        case TAEType::NON_TERMINAUX: typeStr = "NON_TERMINAUX"; break;
+        case TAEType::ERREUR: typeStr = "ERREUR"; break;
+    }
+    cout << "Type: " << typeStr;
+    if (valeur != -1) cout << ", Valeur: " << valeur;
+    cout << endl;
+}
+
+TAE::TAE() {
+    // cout << "Constructeur TAE" << endl;
+}
+
+TAE::~TAE() {
+    // cout << "Destructeur Automate" << endl;
+}
+
+
 void remplirTable(TableauAnalyse &table) {
     // État 0
     table[0][EXPRESSION] = TAE(TAEType::NON_TERMINAUX, 1);
@@ -35,9 +58,9 @@ void remplirTable(TableauAnalyse &table) {
     table[5][INT] = TAE(TAEType::DECALAGE, 3);
 
     // État 6
-    table[1][PLUS] = TAE(TAEType::DECALAGE, 4);
-    table[1][MULT] = TAE(TAEType::DECALAGE, 5);
-    table[1][CLOSEPAR] = TAE(TAEType::DECALAGE, 9);
+    table[6][PLUS] = TAE(TAEType::DECALAGE, 4);
+    table[6][MULT] = TAE(TAEType::DECALAGE, 5);
+    table[6][CLOSEPAR] = TAE(TAEType::DECALAGE, 9);
 
     // État 7
     table[7][PLUS] = TAE(TAEType::REDUCTION, 2);

@@ -20,8 +20,9 @@ bool Regle::verifyParams(vector<Symbole*> params) {
         return false;
     }
 
-    for (size_t i = 0; i < droite.size(); i++) {
-        if ( !Symbole::isSameIndent( *params[i], *droite[i]) ) {
+    int paramsSize = params.size();
+    for (size_t i = 0; i < paramsSize; i++) {
+        if ( !Symbole::isSameIndent( *params[paramsSize-i-1], *droite[i]) ) {
             return false;
         }
     }

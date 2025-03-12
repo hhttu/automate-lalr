@@ -19,7 +19,8 @@ bool isContainIdentificateurKey(TableauAnalyse& TA, int etat, Identificateurs id
 
 void Automate::init() {
     // TODO: init tableau d'analyse (Thi Tho)
-    // TableauAnalyse TA = NULL; 
+    remplirTable(TA);
+    afficherTable(TA); 
 
     Regle* r1 = new Regle(
         NonTerminal::E_prime, 
@@ -63,41 +64,45 @@ void Automate::afficherRegles() {
 
 void Automate::executer(Lexer lexer) {
     // TODO: empty 2 stacks (Thanh Tu)
+    pileEtat.push(0);
+    
     Symbole * s = lexer.Consulter();
     bool endExecution = false, isValid = true;
     int topEtat, finalValue = NULL;
-    Identificateurs identificateurs;
+    Identificateurs identificateur;
 
-    while (!endExecution && isValid && *s != FIN) {
-        identificateurs = s->getIdent();
+    int cnt = 0;
+    while (cnt < 200  && !endExecution && isValid) {
+        identificateur = s->getIdent();
         topEtat = pileEtat.top();
 
-        if (isContainIdentificateurKey(TA, topEtat, identificateurs)) {
-            TAE element = TA[topEtat][identificateurs];
+        if (isContainIdentificateurKey(TA, topEtat, identificateur)) {
+            TAE element = TA[topEtat][identificateur];
 
-            // TAEType type = element.getType();
-            // int valeur = element.getValue();
+            TAEType type = element.getType();
+            int valeur = element.getValue();
 
-            // switch (TAEType)
-            // {
-            // case TAEType::DECALAGE:
-            //     depiler(s, topEtat);
-            //     s = lexer.Consulter();
-            //     break;
-            // case TAEType::REDUCTION:
-            //     empiler(regles[valeur-1]);
-            //     break;
-            // case TAEType::ACCEPT:
-            //     endExecution = true;
-            //     finalValue = dynamic_cast<Expression*>(pileSymbole.top())->getValue();
-            //     break;
-            // case TAEType::ERREUR:
-            //     endExecution = false;
-            //     isValid = false;
-            //     break;
-            // default:
-            //     break;
-            // }
+            switch (type)
+            {
+            case TAEType::DECALAGE:
+                depiler(s, valeur);
+                lexer.Avancer();
+                s = lexer.Consulter();
+                break;
+            case TAEType::REDUCTION:
+                empiler(regles[valeur-1]);
+                break;
+            case TAEType::ACCEPTER:
+                endExecution = true;
+                finalValue = dynamic_cast<Expression*>(pileSymbole.top())->getValue();
+                break;
+            case TAEType::ERREUR:
+                endExecution = false;
+                isValid = false;
+                break;
+            default:
+                break;
+            }
         } else {
             endExecution = false;
             isValid = false;
@@ -121,13 +126,11 @@ void Automate::depiler(Symbole* s, int e) {
     // TODO: implement (Thanh Tu)
     pileEtat.push(e);
     pileSymbole.push(s);
-
 }
 
 void Automate::empiler(Regle* regleReduction) {
     // TODO: implement (Son), when empiler, remember to delete symbols -> not memory leak
     int n = regleReduction->getNbSymboleDroite();
-
     vector<Symbole*> empilePiles = vector<Symbole*>();
     for (int i = 0; i < n; i++) {
         pileEtat.pop();
