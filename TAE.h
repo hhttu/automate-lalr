@@ -67,8 +67,8 @@ class TAE {
         void afficher() const; 
     
     private:
-        TAEType type;
-        int valeur;
+        TAEType type;     // Type de l'action (décalage, réduction, etc.)
+        int valeur;       // Valeur associée à l'action (par défaut `-1` si l'action est `ACCEPTER` ou `ERREUR`).
 
 };
 
