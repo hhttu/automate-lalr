@@ -14,9 +14,10 @@ class Regle {
     public:
 
         /** 
-         * Constructeur par défault pour la classe Regle.
+         * Constructeur par défaut et destructeur de la classe Regle.
          */
         Regle();
+        ~Regle();
 
         /** 
          * Constructeur pour la classe Regle.
@@ -33,11 +34,6 @@ class Regle {
          * f = return new Expression( NonTerminal::E, e1->getValue() + e2->getValue() );
          */
         Regle(NonTerminal g, vector<Symbole*> d, function<Symbole*(vector<Symbole*>)>f) : gauche(g), droite(d), evaluateFunction(f) { }
-
-        /** 
-         * Affiche la règle.
-         */
-        ~Regle();
 
         /** 
          * Affiche la règle.

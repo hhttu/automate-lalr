@@ -63,39 +63,52 @@ void Automate::afficherRegles() {
 }
 
 void Automate::executer(Lexer lexer) {
+    // Initialise la pile des états avec l'état initial (0)
     pileEtat.push(0);
     
+    // Récupère le premier symbole analysé par le lexer
     Symbole * s = lexer.Consulter();
+
     bool endExecution = false, isValid = true;
     int topEtat, finalValue;
     Identificateurs identificateur;
 
-    int cnt = 0;
-    while (cnt < 200  && !endExecution && isValid) {
+    // Boucle pour traiter les symboles dans la chaîne d'entrée
+    // jusqu'à ce que la chaîne soit acceptée ou invalidée.
+    while (!endExecution && isValid) {
+
+        // Récupère l'identificateur du symbole courant et l'état au sommet de la pile
         identificateur = s->getIdent();
         topEtat = pileEtat.top();
 
+         // Vérifie si la table d'analyse (TA) contient une transition pour l'état et l'identificateur courants
         if (isContainIdentificateurKey(TA, topEtat, identificateur)) {
-            TAE element = TA[topEtat][identificateur];
 
+            // Récupère l'élément de transition correspondant et son type d'action et sa valeur associée
+            TAE element = TA[topEtat][identificateur];
             TAEType type = element.getType();
             int valeur = element.getValue();
-
+        
+            // Exécute l'action en fonction du type d'élément trouvé
             switch (type)
             {
             case TAEType::DECALAGE:
+                // Décalage : empile l'état et le symbole, puis avance dans le lexer
                 depiler(s, valeur);
                 lexer.Avancer();
                 s = lexer.Consulter();
                 break;
             case TAEType::REDUCTION:
+                // Réduction : applique une règle de réduction en empilant un nouveau symbole
                 empiler(regles[valeur-1]);
                 break;
             case TAEType::ACCEPTER:
+                // Acceptation : la chaîne d'entrée est reconnue
                 endExecution = true;
                 finalValue = dynamic_cast<Expression*>(pileSymbole.top())->getValue();
                 break;
             case TAEType::ERREUR:
+                // Erreur : la chaîne est invalide
                 endExecution = false;
                 isValid = false;
                 break;
@@ -103,26 +116,29 @@ void Automate::executer(Lexer lexer) {
                 break;
             }
         } else {
+            // Aucun élément trouvé dans la table, la chaîne est invalide
             endExecution = false;
             isValid = false;
         }
 
     }
 
+    // Affichage du résultat
     if (isValid) {
         cout << "Chaine validée" << endl;
         if (finalValue) {
-            cout << "Value = " << finalValue;
+            cout << "Value = " << finalValue << endl;
         }
     } else {
-        cout << "Chaine invalidée";
+        cout << "Chaine invalidée" << endl;
     }
 
-    emptyPiles();
+    emptyPiles(); // vide les piles après l'exécution
     delete s; // on supprime le dernier symbole
 }
 
 void Automate::depiler(Symbole* s, int e) {
+    // Dépile un symbole et un état
     pileEtat.push(e);
     pileSymbole.push(s);
 }
