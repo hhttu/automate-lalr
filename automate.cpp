@@ -12,11 +12,6 @@ Symbole* evaluateRegle3(vector<Symbole*> v);
 Symbole* evaluateRegle4(vector<Symbole*> v);
 Symbole* evaluateRegle5(vector<Symbole*> v);
 
-bool isContainIdentificateurKey(TableauAnalyse& TA, int etat, Identificateurs identificateurs) {
-    const auto& rowMap = TA[etat];
-    return rowMap.find(identificateurs) != rowMap.end();
-}
-
 void Automate::init() {
     // Initialiser la table d'analyse
     remplirTable(TA);
@@ -54,12 +49,6 @@ void Automate::init() {
 
     regles = vector<Regle*>{r1, r2, r3, r4, r5};
     emptyPiles();
-}
-
-void Automate::afficherRegles() {
-    for (auto &r : regles) {
-        r->Affiche();
-    }
 }
 
 void Automate::executer(Lexer lexer) {
@@ -171,7 +160,6 @@ void Automate::empiler(Regle* regleReduction) {
     empilePiles.clear();
 }
 
-
 void Automate::emptyPiles() {
     // Empty Pile etats
     pileEtat = stack<int>();
@@ -183,6 +171,18 @@ void Automate::emptyPiles() {
     }
 
     pileSymbole = stack<Symbole*>();
+}
+
+void Automate::afficherRegles() {
+    for (auto &r : regles) {
+        r->Affiche();
+    }
+}
+
+bool isContainIdentificateurKey(TableauAnalyse& TA, int etat, Identificateurs identificateurs) {
+    // Vérifier si l'état courant contient l'identificateur dans la table d'analyse
+    const auto& rowMap = TA[etat];
+    return rowMap.find(identificateurs) != rowMap.end();
 }
 
 Automate::Automate() {
